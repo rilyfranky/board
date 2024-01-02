@@ -69,12 +69,39 @@ console.log("JS TEST");
 
 var bnoValue = '<c:out value="${board.bno}"/>';
 
-replyService.add(
-		{reply:"JS TEST", replyer:"tester", bno:bnoValue},
-		function(result){
-			alert("RESULT: " + result);
-		}
-		);
+//reply list test
+replyService.getList({bno:bnoValue, page:1}, function(list){
+	
+	for(var i = 0, len = list.length||0; i < len; i++){
+		console.log(list[i]);
+	}
+});
+
+//reply remove test
+/* replyService.remove(41, function(count){
+	console.log(count);
+	
+	if(count === "success"){
+		alert("REMOVED");
+	}
+}, function(err){
+	alert('REMOVE TEST ERROR.....');
+}); */
+
+/* //reply udpate test
+replyService.update({
+	rno : 21,
+	bno : bnoValue,
+	reply : "Modified Reply...."
+}, function(result){
+	alert("update complete....");
+});
+ */
+ 
+//reply get test
+replyService.get(10, function(data){
+	console.log(data);
+})
 
 </script>
 
