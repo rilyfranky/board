@@ -23,22 +23,6 @@ var replyService = (function(){
 		})
 	}
 	
-	function getList(param, callback, error) {
-		var bno = param.bno;
-		var page = param.page || 1;
-		
-		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
-			function(data) {
-				if (callback) {
-					callback(data);
-				}
-			}).fail(function(xhr, status, err) {
-				if (error) {
-					error();
-				}
-		});
-	}
-	
 	function remove(rno, callback, error){
 		$.ajax({
 			type : 'delete',
@@ -112,6 +96,24 @@ var replyService = (function(){
 		}
 	}
 	
+	//댓글 리스트 가져오기
+	function getList(param, callback, error){
+		var bno = param.bno;
+		var page = param.page || 1;
+		
+		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
+			function(data){
+				if(callback) {
+					callback(data.replyCnt, data.list);
+				}
+			}).fail(function(xhr, status, err) {
+			if(error){
+				error();
+			}
+			});
+	}
+	
+	
 	return {
 		add : add,
 		getList : getList,
@@ -121,5 +123,6 @@ var replyService = (function(){
 		displayTime : displayTime
 		
 	};
+
 	
 })();

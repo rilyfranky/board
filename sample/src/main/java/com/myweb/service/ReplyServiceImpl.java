@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myweb.domain.Criteria;
+import com.myweb.domain.ReplyPageDTO;
 import com.myweb.domain.ReplyVO;
 import com.myweb.mapper.ReplyMapper;
 
@@ -58,6 +59,13 @@ public class ReplyServiceImpl implements ReplyService {
 		log.info("get Reply List of a Board " + bno);
 		
 		return mapper.getListWithPaging(cri, bno);
+	}
+
+	@Override
+	public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+		return new ReplyPageDTO(
+				mapper.getCountByBno(bno),
+				mapper.getListWithPaging(cri, bno));
 	}
 
 }
