@@ -23,6 +23,8 @@
 	
 	<context:component-scan base-package="com.myweb.controller" />
 	
+	<beans:bean id="mulipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
+	
 	
 	
 </beans:beans>
