@@ -14,6 +14,12 @@
   <input type ='file' name='uploadFile' multiple>
 </div>
 
+<div class='uploadResult'>
+  <ul>
+  
+  </ul>
+</div>
+
 <button id='uploadBtn'>Upload</button>
 
 <script
@@ -25,7 +31,7 @@
 $(document).ready(function(){
   
   var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-  var maxSize = 5242880 //5mb
+  var maxSize = 5242880; //5mb
   
   function checkExtension(fileName, fileSize){
 	  
@@ -40,7 +46,22 @@ $(document).ready(function(){
 	  }
 	  return true;
   }
-	
+  
+  var CloneObj = $(".uploadDiv").clone();
+  
+  
+  var uploadResult = $(".uploadResult ul");
+  
+  	function showUploadedFile(uploadResultArr){
+  		
+  		var str = "";
+  		
+  		$(uploadResultArr).each(function(i, obj){
+  			str += "<li>" + obj.fileName + "</li>";
+  		});
+  		
+  		uploadResult.append(str);
+  	}
 	
   $("#uploadBtn").on("click", function(e){
 	 
@@ -59,6 +80,7 @@ $(document).ready(function(){
 		  }
 		  formData.append("uploadFile", files[i]);
 	  }
+	    
 	  
 	  $.ajax({
 		  url: '/uploadAjaxAction',
@@ -69,10 +91,15 @@ $(document).ready(function(){
 		  dataType: 'json',
 		  success: function(result){
 			  console.log(result);
+			  
+			  showUploadedFile(result);
+			  
+			  $(".uploadDiv").html(CloneObj.html());
 		  }
 	  }); //$.ajax
 	  
   });
+
 });
 </script>  
 </body>
