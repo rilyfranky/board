@@ -160,7 +160,7 @@ public class UploadController {
 	public ResponseEntity<byte[]> getFile(String fileName){
 		log.info("fileName: " + fileName);
 		
-		File file = new File("c:\\upload\\" + fileName);
+		File file = new File("C:\\upload\\" + fileName);
 		
 		log.info("file: " + file);
 		
@@ -182,7 +182,7 @@ public class UploadController {
 	public ResponseEntity<Resource> downloadFile(@RequestHeader("User-Agent") String userAgent, String fileName){
 		log.info("download file: " + fileName);
 		
-		Resource resource = new FileSystemResource("c:\\upload\\" + fileName);
+		Resource resource = new FileSystemResource("C:\\upload\\" + fileName);
 				
 		log.info("resource: " + resource);
 		
