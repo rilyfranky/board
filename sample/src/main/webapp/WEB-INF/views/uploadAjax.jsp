@@ -142,6 +142,7 @@ $(document).ready(function(){
   		
   		uploadResult.append(str);
   	}
+  
 	
   $("#uploadBtn").on("click", function(e){
 	 
@@ -180,6 +181,12 @@ $(document).ready(function(){
 	  
   });
 
+  $(".bigPictureWrapper").on("click", function(e){
+	  $(".bigPicture").animate({width: '0%', height: '0%'}, 1000);
+	  setTimeout(() =>{
+		  $(this).hide();
+	  }, 1000);  
+  });
 });
 </script>  
 </body>
