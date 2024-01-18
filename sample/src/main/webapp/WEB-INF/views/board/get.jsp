@@ -76,13 +76,13 @@
 				<ul class="chat">
 					<!-- start reply -->
 					<li class="left clearfix" data-rno='12'>
-						<div>
+						<!-- <div>
 							<div class="header">
 								<strong class="primary-font">user00</strong>
 								<small class="pull-right text-muted">2024-01-02 13:44</small>
 							</div>
 							<p>good job!</p>
-						</div>
+						</div> -->
 					</li>
 					<!-- end reply -->
 				</ul>

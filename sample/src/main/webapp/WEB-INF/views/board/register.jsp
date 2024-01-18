@@ -83,6 +83,21 @@ $(document).ready(function(e){
 		e.preventDefault();
 		
 		console.log("submit clicked");
+		
+		var str = "";
+		
+		$(".uploadResult ul li").each(function(i, obj){
+			var jobj = $(obj);
+			
+			console.dir(jobj);
+			
+			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+		});
+		formObj.append(str).submit();
+		
 	});
 	
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -114,8 +129,8 @@ $(document).ready(function(e){
 			//image type
 			if(obj.image){
 				var fileCallPath = encodeURIComponent(obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-				str += "<li><div>";
-				str += "<span> "+obj.fileName+"</span>";
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+				str += "<span>"+obj.fileName+"</span>";
 				str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 				str += "<img src='/display?fileName="+fileCallPath+"'>";
 				str += "</div>";
@@ -123,8 +138,8 @@ $(document).ready(function(e){
 			}else{
 				var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
 				var fileLink = fileCallPath.replace(new RegExp(/\\/g), "/");
-						str += "<li><div>";
-						str += "<span> "+obj.fileName+"</span>";
+						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+						str += "<span>"+obj.fileName+"</span>";
 						str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 						str += "<img src='/resources/img/sample.png'></a>";
 						str += "</div>";
