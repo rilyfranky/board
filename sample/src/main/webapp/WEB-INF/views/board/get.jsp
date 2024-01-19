@@ -5,6 +5,59 @@
 
 <%@include file="../includes/header.jsp"%>
 
+<div class='bigPictureWrapper'>
+  <div class='bigpicture'>
+  </div>
+</div>
+
+<style>
+.uploadResult {
+  width:100%;
+  background-color: gray;
+}
+
+.uploadResult ul{
+  display:flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadResult ul li{
+  list-style: none;
+  padding: 10px;
+}
+
+.uploadResult ul li img{
+  width: 100%;
+}
+
+.bigPictureWrapper{
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top:0%;
+  width:100%;
+  height:100%;
+  background-color: gray;
+  z-index: 100;
+  background:rgba(255,255,255,0.5);
+}
+
+.bigPicture {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigPicture img{
+  width:600px;
+}
+
+</style>
+
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Board Read</h1>
@@ -58,6 +111,26 @@
 	<!-- /.panel -->
 </div>
 <!-- /.row -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+	  <div class="panel panel-heading">Files</div>    
+	  <!-- /.panel-heading -->
+	  <div class="panel-body">
+		<div class='uploadResult'>
+		  <ul>
+		  </ul>
+		</div>	  
+	  </div>
+	  <!-- end panel-body -->
+    </div>
+    <!-- end panel-body -->
+  </div>
+  <!-- end panel -->
+</div>
+<!-- /.row -->
+
 
 <div class='row'>
 	<div class="col-lg-12">
@@ -378,4 +451,39 @@ $(document).ready(function(){
 	
 	
 });
+</script>
+
+<script>
+$(document).ready(function(){
+	(function(){
+		var bno = '<c:out value="${board.bno}"/>';
+		
+		$.getJSON("/board/getAttachList", {bno: bno}, function(arr){
+			console.log(arr);
+			
+			var str = "";
+			
+			$(arr).each(function(i, attach){
+				
+				//image type
+				if(attach.fileType){
+					var fileCallPath = encodeURIComponent(attach.uploadPath+ "/s_"+attach.uuid+"_"+attach.fileName);
+					
+					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
+					str += "<img src='/display?fileName="+fileCallPath+"'>";
+					str += "</div>";
+					str += "</li>";
+				}else{
+					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
+					str += "<span> "+ attach.fileName+"</span><br/>";
+					str += "<img src='/resources/img/sample.png'>";
+					str += "</div>";
+					str += "</li>";
+				}
+			});
+			$(".uploadResult ul").html(str);
+		});//end getJSON
+	})();//end function
+});
+
 </script>
