@@ -5,58 +5,6 @@
 
 <%@include file="../includes/header.jsp"%>
 
-<div class='bigPictureWrapper'>
-  <div class='bigpicture'>
-  </div>
-</div>
-
-<style>
-.uploadResult {
-  width:100%;
-  background-color: gray;
-}
-
-.uploadResult ul{
-  display:flex;
-  flex-flow: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.uploadResult ul li{
-  list-style: none;
-  padding: 10px;
-}
-
-.uploadResult ul li img{
-  width: 100%;
-}
-
-.bigPictureWrapper{
-  position: absolute;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  top:0%;
-  width:100%;
-  height:100%;
-  background-color: gray;
-  z-index: 100;
-  background:rgba(255,255,255,0.5);
-}
-
-.bigPicture {
-  position: relative;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bigPicture img{
-  width:600px;
-}
-
-</style>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -111,6 +59,59 @@
 	<!-- /.panel -->
 </div>
 <!-- /.row -->
+
+<div class='bigPictureWrapper'>
+  <div class='bigPicture'>
+  </div>
+</div>
+
+<style>
+.uploadResult {
+  width:100%;
+  background-color: gray;
+}
+
+.uploadResult ul{
+  display:flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadResult ul li{
+  list-style: none;
+  padding: 10px;
+}
+
+.uploadResult ul li img{
+  width: 100%;
+}
+
+.bigPictureWrapper{
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top:0%;
+  width:100%;
+  height:100%;
+  background-color: gray;
+  z-index: 100;
+  background:rgba(255,255,255,0.5);
+}
+
+.bigPicture {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigPicture img{
+  width:600px;
+}
+
+</style>
 
 <div class="row">
   <div class="col-lg-12">
@@ -171,7 +172,7 @@
 	<!-- ./ end row -->
 </div>
 
-<%@include file="../includes/footer.jsp"%>
+
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -482,8 +483,47 @@ $(document).ready(function(){
 				}
 			});
 			$(".uploadResult ul").html(str);
+
+		
 		});//end getJSON
 	})();//end function
 });
 
+
+$(".uploadResult").on("click", "li", function(e){
+	console.log("view image");
+	
+	var liObj = $(this);
+	
+	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+	//var path = liObj.data("path")+"\\"+liObj.data("uuid")+"_"+liObj.data("filename");
+	
+	if(liObj.data("type")){
+		showImage(path.replace(new RegExp(/\\/g), "/"));
+		//showImage(path);
+	} else {
+		//download
+		self.location = "/download?fileName="+path;
+	}
+});
+
+function showImage(fileCallPath){
+	alert(fileCallPath);
+	
+	$(".bigPictureWrapper").css("display", "flex").show();
+	
+	$(".bigPicture")
+	.html("<img src='/display?fileName="+fileCallPath+"'>")
+	.animate({width:'100%', height:'100%'}, 1000);
+}
+
+$(".bigPictureWrapper").on("click", function(e){
+    $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+    setTimeout(function(){
+      $('.bigPictureWrapper').hide();
+    }, 1000);
+  });
+
 </script>
+
+<%@include file="../includes/footer.jsp"%>
