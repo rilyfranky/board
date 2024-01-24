@@ -213,7 +213,7 @@
 
 <script>
 
-console.log("==========");
+/* console.log("==========");
 console.log("JS TEST");
 
 var bnoValue = '<c:out value="${board.bno}"/>';
@@ -224,7 +224,7 @@ replyService.getList({bno:bnoValue, page:1}, function(list){
 	for(var i = 0, len = list.length||0; i < len; i++){
 		console.log(list[i]);
 	}
-});
+}); */
 
 //reply remove test
 /* replyService.remove(41, function(count){
