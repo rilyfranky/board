@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="customAccessDenied" class="com.myweb.security.CustomAccessDeniedHandler"></bean>
+<bean id="customLoginSuccess" class="com.myweb.security.CustomLoginSuccessHandler"></bean>
 
 <security:http>
 
@@ -16,15 +17,18 @@
 	
 	<security:intercept-url pattern="/sample/admin" 
 	access="hasRole('ROLE_ADMIN')"/>
-		
-	<!-- security:form-login / -->
-	<security:form-login login-page="/customLogin" />
-	
+			
 	<!-- security:access-denied-handler error-page="/accessError"/ -->
 	<security:access-denied-handler ref="customAccessDenied"/>
+	<!--  <security:csrf disabled="true"/>  -->
+	
+	<!-- security:form-login / -->
+	<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" />
+	
+	<security:logout logout-url="/customLogout" invalidate-session="true" />
 	
   </security:http>
-
+		
   <security:authentication-manager>
   
   	<security:authentication-provider>
