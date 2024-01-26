@@ -7,6 +7,7 @@
 
 <bean id="customAccessDenied" class="com.myweb.security.CustomAccessDeniedHandler"></bean>
 <bean id="customLoginSuccess" class="com.myweb.security.CustomLoginSuccessHandler"></bean>
+<bean id="customPasswordEncoder" class="com.myweb.security.CustomNoOpPasswordEncoder"></bean>
 
 <security:http>
 
@@ -33,13 +34,17 @@
   
   	<security:authentication-provider>
   	
-  		<security:user-service>
-  			<!-- noop:인코더 임시 처리 -->
+  		<!-- <security:user-service>
+  			noop:인코더 임시 처리
   			<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
   			
   			<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
   			
-  		</security:user-service>
+  		</security:user-service> -->
+  		
+  		<security:jdbc-user-service data-source-ref="dataSource" />
+  		
+  		<security:password-encoder ref="customPasswordEncoder" />
   		
   	</security:authentication-provider>
   
