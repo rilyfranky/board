@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="customAccessDenied" class="com.myweb.security.CustomAccessDeniedHandler"></bean>
-<bean id="customLoginSuccess" class="com.myweb.security.CustomLoginSuccessHandler"></bean>
+<!-- bean id="customLoginSuccess" class="com.myweb.security.CustomLoginSuccessHandler"></bean -->
 <!-- <bean id="customPasswordEncoder" class="com.myweb.security.CustomNoOpPasswordEncoder"></bean> -->
 <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 <bean id="customUserDetailsService" class="com.myweb.security.CustomUserDetailsService"></bean>
@@ -26,7 +26,7 @@
 	<!--  <security:csrf disabled="true"/>  -->
 	
 	<!-- security:form-login / -->
-	<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" />
+	<security:form-login login-page="/customLogin" />
 	
 	<security:logout logout-url="/customLogout" invalidate-session="true" />
 	
