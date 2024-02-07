@@ -45,7 +45,7 @@
 
 <body>
 
-    <div id="wrapper">
+    <div id="wrapper"></div>
 
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -56,7 +56,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                <a class="navbar-brand" href="/board/list">Board home</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -261,8 +261,13 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <sec:authorize access="isAuthenticated()">
+                        <li><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
+                        </sec:authorize>
+                        <sec:authorize access="isAnonymous()">
+                        <li><a href="/customLogin"><i class="fa fa-sign-out fa-fw"></i> Login</a></li>
+                        </sec:authorize>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
