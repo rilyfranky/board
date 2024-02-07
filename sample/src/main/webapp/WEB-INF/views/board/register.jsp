@@ -37,6 +37,7 @@
                             <label>Writer</label> <input class="form-control" name='writer' value='<sec:authentication property="principal.username"/>' 
                             readonly="readonly">
                           </div>
+                          
                           <button type="submit" class="btn btn-default">Submit Button</button>
                           <button type="reset" class="btn btn-default">Reset Button</button>
                         </form>
@@ -155,26 +156,10 @@ $(document).ready(function(e){
 		uploadUL.append(str);
 	}
 	
-	$(".uploadResult").on("click", "button", function(e){
-		
-		console.log("delete file");
-		
-		var targetFile = $(this).data("file");
-		var type = $(this).data("type");
-		
-		var targetLi = $(this).closest("li");
-		
-		$.ajax({
-			url: '/deleteFile',
-			data: {fileName: targetFile, type:type},
-			dataType: 'text',
-			type: 'POST',
-			success: function(result){
-				alert(result);
-				targetLi.remove();
-			}
-		}); //$.ajax
-	});
+	var csrfHeaderName ="${_csrf.headerName}";
+	var csrfTokenValue="${_csrf.token}";
+	
+
 	
 	$("input[type='file']").change(function(e){
 		var formData = new FormData();
@@ -194,6 +179,9 @@ $(document).ready(function(e){
 			url: '/uploadAjaxAction',
 			processData: false,
 			contentType: false,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			data: formData,
 			type: 'POST',
 			dataType: 'json',
@@ -202,6 +190,30 @@ $(document).ready(function(e){
 				showUploadResult(result); //업로드 처리 결과 함수
 			}
 			
+		}); //$.ajax
+	});
+	
+	$(".uploadResult").on("click", "button", function(e){
+		
+		console.log("delete file");
+		
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
+		
+		var targetLi = $(this).closest("li");
+		
+		$.ajax({
+			url: '/deleteFile',
+			data: {fileName: targetFile, type:type},
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
+			dataType: 'text',
+			type: 'POST',
+			success: function(result){
+				alert(result);
+				targetLi.remove();
+			}
 		}); //$.ajax
 	});
 	

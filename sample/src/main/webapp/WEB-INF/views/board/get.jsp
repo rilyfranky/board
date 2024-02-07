@@ -24,22 +24,22 @@
 
 				<div class="form-group">
 					<label>Bno</label> <input class="form-control" name='bno'
-						value='<c:out value="${board.bno }"/>' readonly="readonly">
+						value='<c:out value="${board.bno}"/>' readonly="readonly">
 				</div>
 
 				<div class="form-group">
 					<label>Title</label> <input class="form-control" name='title'
-						value='<c:out value="${board.title }"/>' readonly="readonly">
+						value='<c:out value="${board.title}"/>' readonly="readonly">
 				</div>
 
 				<div class="form-group">
 					<label>Text area</label> <input class="form-control" name='content'
-						value='<c:out value="${board.content }"/>' readonly="readonly">
+						value='<c:out value="${board.content}"/>' readonly="readonly">
 				</div>
 
 				<div class="form-group">
 					<label>Writer</label> <input class="form-control" name='writer'
-						value='<c:out value="${board.writer }"/>' readonly="readonly">
+						value='<c:out value="${board.writer}"/>' readonly="readonly">
 				</div>
 
 				<!-- button data-oper='modify' class="btn btn-default">Modify</button-->
@@ -146,12 +146,16 @@
 	<div class="col-lg-12">
 		<!-- /.panel -->
 		<div class="panel panel-default">
+		
 			<!-- <div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i> Reply
 			</div> -->
+			
 			<div class="panel-heading">
-			<i class="fa fa-comments fa-fw"></i>Reply
-				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+			  <i class="fa fa-comments fa-fw"></i>Reply
+			  <sec:authorize access="isAuthenticated()">
+			  <button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+			  </sec:authorize>
 			</div>
 			
 			<!-- /.panel-heading -->
@@ -198,7 +202,7 @@
 				</div>
 				<div class="form-group">
 					<label>Replyer</label>
-					<input class="form-control" name='replyer' value='replyer'>
+					<input class="form-control" name='replyer' value='replyer' readonly="readonly">
 				</div>
 				<div class="form-group">
 					<label>Reply Date</label>
@@ -393,14 +397,32 @@ $(document).ready(function(){
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
 		
+		var replyer = null;
+		
+		<sec:authorize access="isAuthenticated()">
+		
+		replyer = '<sec:authentication property="principal.username"/>';
+		
+		</sec:authorize>
+		
+		var csrfHeaderName ="${_csrf.headerName}";
+		var csrfTokenValue ="${_csrf.token}";
+		
 		$("#addReplyBtn").on("click", function(e){
 			modal.find("input").val("");
+			modal.find("input[name='replyer']").val(replyer);
 			modalInputReplyDate.closest("div").hide();
 			modal.find("button[id != 'modalCloseBtn']").hide();
 			
 			modalRegisterBtn.show();
 			
 			$(".modal").modal("show");
+		});
+		
+		
+		//Ajax spring security header
+		$(document).ajaxSend(function(e, xhr, options){
+			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
 		});
 		
 		modalRegisterBtn.on("click", function(e){
@@ -440,22 +462,59 @@ $(document).ready(function(){
 	});
 	
 	modalModBtn.on("click", function(e){
-		var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+		
+		var originalReplyer = modalInputReplyer.val();
+		
+		
+		var reply = {rno:modal.data("rno"), reply: modalInputReply.val(), replyer: originalReplyer};
+		
+		if(!replyer){
+			alert("로그인 후 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		console.log("Original Replyer: " + originalReplyer);
+		
+		if (replyer != originalReplyer){
+			alert("자신이 작성한 댓글만 수정 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
 		
 		replyService.update(reply, function(result){
 			alert(result);
 			modal.modal("hide");
-			showList(1);
+			showList(pageNum);
 		});
 	});
 	
 	modalRemoveBtn.on("click", function(e){
 		var rno = modal.data("rno");
 		
-		replyService.remove(rno, function(result){
+		console.log("RNO: " + rno);
+		console.log("REPLYER " + replyer);
+		
+		if(!replyer){
+			alert("로그인 후 삭제가 가능합니다.");
+			modal.modal("hide");
+			return ;
+		}
+		
+		var originalReplyer = modalInputReplyer.val();
+		
+		console.log("Original Replyer: " + originalReplyer); //댓글 작성자
+		
+		if(replyer != originalReplyer){
+			alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+			modal.modal("hide");
+			return ;
+		}
+		
+		replyService.remove(rno, originalReplyer, function(result){
 			alert(result);
 			modal.modal("hide");
-			showList(1);			
+			showList(pagaNum);			
 		});
 	});
 	
