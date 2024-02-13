@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
     <id property="userid" column="userid" />
     <result property="userid" column="userid" />
     <result property="userpw" column="userpw" />
-    <result property="userName" column="username" />
+    <result property="username" column="username" />
     <result property="enabled" column="enabled" />
     <result property="regDate" column="regdate" />
     <result property="updateDate" column="updatedate" />
@@ -28,6 +28,15 @@ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
   auth.userid
   WHERE mem.userid = #{userid}
   </select>
+  
+  <insert id="register">
+  INSERT INTO tbl_member(userid, userpw, username) VALUES (#{userid}, #{userpw}, #{username})
+  </insert>
+  
+  <insert id="registerAuth">
+  INSERT INTO tbl_member_auth(userid, auth) VALUES (#{userid}, 'ROLE_USER')
+  </insert>
+  
 
 
 </mapper>
