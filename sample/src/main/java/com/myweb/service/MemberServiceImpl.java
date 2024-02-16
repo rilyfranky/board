@@ -7,15 +7,17 @@ import com.myweb.domain.AuthVO;
 import com.myweb.domain.MemberVO;
 import com.myweb.mapper.MemberMapper;
 
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Service
 @Log4j
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 	
-	@Setter(onMethod_ = @Autowired)
-	private MemberMapper mapper;
+	@Autowired
+	MemberMapper mapper;
 	
 	@Override
 	public void register(MemberVO vo) throws Exception{
@@ -25,6 +27,13 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void registerAuth(AuthVO vo) throws Exception {
 		mapper.registerAuth(vo);		
+	}
+
+	@Override
+	public int selectId(String userid) {
+		int result = mapper.selectId(userid);
+		log.info("result: " + result);
+		return result;
 	}
 
 	

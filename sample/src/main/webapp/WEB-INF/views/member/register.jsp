@@ -5,6 +5,8 @@
 
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
+<%@include file="../includes/header.jsp"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -34,6 +36,19 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+<style>
+.id_ok{
+color:#008000;
+display: none;
+}
+
+.id_already{
+color:#6A82FB; 
+display: none;
+}
+</style>
+    
 
 
 </head>
@@ -46,9 +61,11 @@
 		
 		
 		$(".cancel").on("click", function(){
-			location.href = "/login";
+			location.href = "/customLogin";
 		})
 		
+    	
+		//입력 체크
 		$("#submit").on("click", function(){
 		
 			
@@ -74,11 +91,44 @@
             .attr("name", csrfHeaderName)
             .attr("value", csrfTokenValue)
             .appendTo("form");
+	
 		});
 	});
+	
+	
 
 </script>
+<script type="text/javascript">
+	var csrfHeaderName ="${_csrf.headerName}";
+	var csrfTokenValue="${_csrf.token}";
 
+	function checkId(){
+		var userid = $('#userid').val();
+		$.ajax({
+			url:'/member/checkId',
+			type:'post',
+			data:{userid:userid},
+			dataType:'json',
+			beforeSend: function(xhr) {
+	           xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+	        },
+			success:function(result){
+				  if(result!=0){
+				        $('.id_ok').css("display", "none");
+				        $('.id_already').css("display", "inline-block");
+				        alert("중복된 아이디입니다.");
+				        $('#userid').val('');
+				    } else {
+				        $('.id_ok').css("display", "inline-block");
+				        $('.id_already').css("display", "none");
+				    }
+			},
+			error:function(){
+				alert("에러입니다.");
+			}
+		});
+	};
+</script>
 <body>
 
 
@@ -89,7 +139,9 @@
 	
 		<div class="form-group has-feedback">
 			<label class="control-label" for="userid">아이디</label> <input
-				class="form-control" type="text" id="userid" name="userid" />
+				class="form-control" type="text" id="userid" name="userid" onblur="checkId()" />
+			<span class="id_ok">사용 가능한 아이디입니다.</span>
+			<span class="id_already">중복된 아이디입니다.</span>
 		</div>
 		<div class="form-group has-feedback">
 			<label class="control-label" for="userpw">패스워드</label> <input
@@ -109,3 +161,5 @@
 
 </body>
 </html>
+
+<%@include file="../includes/footer.jsp"%>

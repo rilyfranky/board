@@ -37,6 +37,10 @@ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
   INSERT INTO tbl_member_auth(userid, auth) VALUES (#{userid}, 'ROLE_USER')
   </insert>
   
+  <select id="selectId" resultType="int">
+  SELECT COUNT(*) FROM tbl_member WHERE userid = #{userid}
+  </select>
+  
 
 
 </mapper>
