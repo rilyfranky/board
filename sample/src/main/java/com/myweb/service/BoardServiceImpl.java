@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.myweb.domain.BoardAttachVO;
@@ -82,10 +83,11 @@ public class BoardServiceImpl implements BoardService {
 //		return mapper.getList();
 //	}
 
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	@Override
 	public BoardVO get(Long bno) {
 		log.info("get......." + bno);
-		
+		mapper.updateView(bno);
 		return mapper.read(bno);
 	}
 
@@ -108,6 +110,14 @@ public class BoardServiceImpl implements BoardService {
 		log.info("get Attach list by bno " + bno);
 		
 		return attachMapper.findByBno(bno);
+	}
+
+
+	@Override
+	public void updateView(Long bno) throws Exception {
+		log.info("updateView : ");
+		mapper.updateView(bno);
+		
 	}
 	
 

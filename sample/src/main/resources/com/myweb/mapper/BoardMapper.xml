@@ -32,11 +32,11 @@ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 
 <select id="getListWithPaging" resultType="com.myweb.domain.BoardVO">
 	<![CDATA[
-		select bno, title, content, writer, regdate, updatedate, replycnt
+		select bno, title, content, writer, regdate, updatedate, replycnt, boardview
 		from
 			(
 			select /*+INDEX_DESC(tbl_board pk_board) */
-				rownum rn, bno, title, content, writer, regdate, updatedate, replycnt
+				rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, boardview
 			from
 				tbl_board
 			where
@@ -89,6 +89,10 @@ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 
 <update id="updateReplyCnt">
 	update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
+</update>
+
+<update id="updateView">
+	update tbl_board set boardview = boardview+1 where bno = #{bno}
 </update>
 
 </mapper>

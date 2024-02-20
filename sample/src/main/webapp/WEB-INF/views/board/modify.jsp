@@ -67,6 +67,12 @@
 							readonly="readonly">
 					</div>
 					
+					<div class="form-group">
+						<label>View</label> <input class="form-control"
+							name='boardView'
+							value='<c:out value="${board.boardview }"/>' readonly="readonly">
+					</div>
+					
 					<sec:authentication property="principal" var="pinfo" />
 					
 					<sec:authorize access="isAuthenticated()">
